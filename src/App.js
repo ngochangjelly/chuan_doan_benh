@@ -1,11 +1,12 @@
 import "./App.css";
 import { ReactSearchAutocomplete } from "react-search-autocomplete";
-import { sympTomDiease, normalizedSymtomDisease } from "./constants";
+import { sympTomDiease } from "./constants";
+import { normalizedSymtomDisease } from "./constants/normalizedSymtompDisease";
 import { useState } from "react";
 
 function App() {
   const [disease, setDisease] = useState({ name: "", root: "" });
-  const items = [...sympTomDiease, ...normalizedSymtomDisease];
+  const items = [...normalizedSymtomDisease, ...sympTomDiease];
 
   const handleOnSearch = (string, results) => {
     // onSearch will have as the first callback parameter
@@ -15,19 +16,18 @@ function App() {
 
   const handleOnSelect = (item) => {
     // the item selected
-    console.log(item);
-    setDisease(sympTomDiease[item.id]);
+    setDisease(sympTomDiease[+item.id.replace("normalized-", "") - 1]);
   };
 
-  const handleOnFocus = () => {
-    console.log("Focused");
-  };
+  const handleOnFocus = () => {};
 
   return (
     <div className="App">
       <header className="App-header">
-        {disease && (
-          <div style={{ width: 400, marginBottom: 50 }}>{disease.root}</div>
+        {disease && disease.id && (
+          <div style={{ width: 400, marginBottom: 50 }}>
+            {sympTomDiease[+disease.id.replace("normalized-", "") - 1].root}
+          </div>
         )}
         <div style={{ width: 400 }}>
           <ReactSearchAutocomplete
@@ -39,7 +39,7 @@ function App() {
           />
           <div style={{ width: 400, marginTop: 20 }}>
             Nguồn bài báo:{" "}
-            <a href="http://shorturl.at/uERS4" target="_blank">
+            <a href="http://shorturl.at/uERS4" target="_blank" rel="noreferrer">
               shorturl.at/uERS4
             </a>
           </div>
